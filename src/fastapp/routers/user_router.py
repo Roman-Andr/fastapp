@@ -23,12 +23,12 @@ async def delete_user(
     user_id: int,
     service: UserServiceDeps,
     _: AdminDeps
-):
+) -> None:
     await service.delete_user(user_id)
     return None
 
 
-@router.patch("/{user_id}/role", response_model=UserOutput)
+@router.patch("/{user_id}/role")
 async def update_user_role(
     user_id: int,
     new_role: UserRole,

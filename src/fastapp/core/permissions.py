@@ -1,6 +1,7 @@
+from typing import Annotated
+
 from fastapi import HTTPException, status
 from fastapi.params import Depends
-from sqlalchemy.sql.annotation import Annotated
 
 from fastapp.core.auth import get_current_active_user
 from fastapp.schemas.role_schema import UserRole

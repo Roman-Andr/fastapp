@@ -5,7 +5,7 @@ from fastapp.schemas.user_schema import UserCreate
 
 USER_DEFAULT_USERNAME = "testuser"
 USER_DEFAULT_EMAIL = "test@example.com"
-USER_DEFAULT_PASSWORD = "testpassword"
+USER_DEFAULT_PASSWORD = "ValidPass123!"
 
 
 @pytest.fixture
