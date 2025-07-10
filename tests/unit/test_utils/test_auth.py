@@ -1,7 +1,7 @@
 import pytest
 from fastapi import HTTPException, status
 
-from app.core.auth import create_access_token, create_refresh_token, authenticate_user
+from fastapp.core.auth import create_access_token, create_refresh_token, authenticate_user
 from tests.fixtures.users import USER_DEFAULT_USERNAME, USER_DEFAULT_PASSWORD
 
 

@@ -17,6 +17,7 @@ class TaskUpdate(TaskBase):
 class TaskOutput(TaskBase):
     id: int
     is_done: bool
+    user_id: int
 
     class Config:
         from_attributes = True

@@ -1,11 +1,11 @@
-# app/core/database.py
+# fastapp/core/database.py
 from typing import Annotated, AsyncGenerator
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 
-from app.config import settings
+from fastapp.config import settings
 
 engine = create_async_engine(
     settings.sqlalchemy_database_url,

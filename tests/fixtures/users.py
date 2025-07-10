@@ -1,7 +1,7 @@
 import pytest
 
-from app.core.security import get_password_hash
-from app.schemas.user_schema import UserCreate
+from fastapp.core.security import get_password_hash
+from fastapp.schemas.user_schema import UserCreate
 
 USER_DEFAULT_USERNAME = "testuser"
 USER_DEFAULT_EMAIL = "test@example.com"

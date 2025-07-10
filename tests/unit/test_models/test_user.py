@@ -1,7 +1,7 @@
 import pytest
 
-from app.core.security import get_password_hash, verify_password
-from app.models.user import UserModel
+from fastapp.core.security import get_password_hash, verify_password
+from fastapp.models.user import UserModel
 from tests.fixtures.users import USER_DEFAULT_USERNAME, USER_DEFAULT_EMAIL, USER_DEFAULT_PASSWORD
 
 

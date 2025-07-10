@@ -7,12 +7,12 @@ from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from sqlalchemy import select
 
-from app.config import settings
-from app.core.database import DBSession
-from app.core.security import verify_password
-from app.models.user import UserModel
-from app.repository.user_repository import UserRepo
-from app.schemas.user_schema import UserOutput
+from fastapp.config import settings
+from fastapp.core.database import DBSession
+from fastapp.core.security import verify_password
+from fastapp.models.user import UserModel
+from fastapp.repositories.user_repository import UserRepo
+from fastapp.schemas.user_schema import UserOutput
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm

@@ -30,7 +30,7 @@ async def test_create_user_duplicate(user_service, user_create):
 
 @pytest.mark.asyncio
 async def test_verify_refresh_token(user_service, user_create, test_user):
-    from app.core.auth import create_refresh_token
+    from fastapp.core.auth import create_refresh_token
 
     refresh_token = create_refresh_token(data={"sub": test_user.username})
     user = await user_service.verify_refresh_token(refresh_token)

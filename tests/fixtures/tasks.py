@@ -1,6 +1,6 @@
 import pytest
 
-from app.schemas.task_schema import TaskCreate, TaskUpdate
+from fastapp.schemas.task_schema import TaskCreate, TaskUpdate
 
 TASK_DEFAULT_TITLE = "Test Task"
 TASK_DEFAULT_DESCRIPTION = "Test Description"

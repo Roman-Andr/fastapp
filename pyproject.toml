@@ -26,3 +26,7 @@ dependencies = [
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.setuptools]
+packages = ["fastapp"]
+package-dir = { "" = "src" }

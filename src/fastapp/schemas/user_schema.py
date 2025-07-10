@@ -1,9 +1,12 @@
 from pydantic import BaseModel, EmailStr
 
+from fastapp.schemas.role_schema import UserRole
+
 
 class UserBase(BaseModel):
     username: str
     email: EmailStr | None = None
+    role: UserRole = UserRole.USER
 
 
 class UserCreate(UserBase):

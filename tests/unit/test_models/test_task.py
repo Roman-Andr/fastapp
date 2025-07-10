@@ -1,6 +1,6 @@
 import pytest
 
-from app.models.task import TaskModel
+from fastapp.models.task import TaskModel
 from tests.fixtures.tasks import TASK_DEFAULT_TITLE, TASK_DEFAULT_DESCRIPTION, TASK_DEFAULT_IS_DONE
 
 

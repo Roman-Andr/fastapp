@@ -1,6 +1,6 @@
 import pytest
 
-from app.schemas.task_schema import TaskUpdate
+from fastapp.schemas.task_schema import TaskUpdate
 from tests.fixtures.tasks import TASK_DEFAULT_TITLE, TASK_DEFAULT_DESCRIPTION, TASK_DEFAULT_IS_DONE
 
 

@@ -1,16 +1,14 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.config import settings
-from app.core.database import Base, engine
-from app.routers.auth_router import router as auth_router
-from app.routers.task_router import router as task_router
-from app.routers.user_router import router as user_router
+from fastapp.config import settings
+from fastapp.core.database import engine
+from fastapp.routers.auth_router import router as auth_router
+from fastapp.routers.task_router import router as task_router
+from fastapp.routers.user_router import router as user_router
 
 
 async def lifespan(_: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     yield
     await engine.dispose()
 

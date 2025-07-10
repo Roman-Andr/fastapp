@@ -3,18 +3,18 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Body
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.core.auth import create_access_token, get_current_active_user, create_refresh_token, \
+from fastapp.core.auth import create_access_token, get_current_active_user, create_refresh_token, \
     authenticate_user
-from app.schemas.token_schema import Token, TokenWithRefresh
-from app.schemas.user_schema import UserOutput
-from app.services.user_service import UserServiceDep
+from fastapp.schemas.token_schema import Token, TokenWithRefresh
+from fastapp.schemas.user_schema import UserOutput
+from fastapp.services.user_service import UserServiceDeps
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/token")
 async def login_for_access_token(
-    service: UserServiceDep,
+    service: UserServiceDeps,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> TokenWithRefresh:
     user = await authenticate_user(service, form_data.username, form_data.password)
@@ -29,7 +29,7 @@ async def login_for_access_token(
 
 @router.post("/refresh")
 async def refresh_access_token(
-    service: UserServiceDep,
+    service: UserServiceDeps,
     refresh_token: str = Body(..., embed=True)
 ) -> Token:
     user = await service.verify_refresh_token(refresh_token)

@@ -1,4 +1,4 @@
-from app.core.security import verify_password, get_password_hash
+from fastapp.core.security import verify_password, get_password_hash
 from tests.fixtures.users import USER_DEFAULT_PASSWORD
 
 
