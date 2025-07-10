@@ -13,5 +13,9 @@ class UserModel(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-    role = Column(Enum(UserRole), default=UserRole.USER)
+    role = Column(
+        Enum(UserRole, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False,
+        default=UserRole.USER
+    )
     tasks = relationship("TaskModel", back_populates="user", cascade="all, delete-orphan")

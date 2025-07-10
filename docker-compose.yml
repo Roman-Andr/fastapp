@@ -1,4 +1,11 @@
 services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
   db:
     image: postgres:17
     restart: unless-stopped
@@ -49,3 +56,4 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  redis_data:

@@ -1,10 +1,11 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapp.core.auth import create_access_token, get_current_active_user, create_refresh_token, \
     authenticate_user
+from fastapp.core.limiter import limiter
 from fastapp.schemas.token_schema import Token, TokenWithRefresh
 from fastapp.schemas.user_schema import UserOutput
 from fastapp.services.user_service import UserServiceDeps
@@ -13,9 +14,11 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/token")
+@limiter.limit("1/minute")
 async def login_for_access_token(
+    request: Request,  # noqa
     service: UserServiceDeps,
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> TokenWithRefresh:
     user = await authenticate_user(service, form_data.username, form_data.password)
     access_token = create_access_token(data={"sub": user.username})
@@ -28,9 +31,11 @@ async def login_for_access_token(
 
 
 @router.post("/refresh")
+@limiter.limit("1/minute")
 async def refresh_access_token(
+    request: Request,  # noqa
     service: UserServiceDeps,
-    refresh_token: str = Body(..., embed=True)
+    refresh_token: Annotated[str, Body(..., embed=True)],
 ) -> Token:
     user = await service.verify_refresh_token(refresh_token)
     new_access_token = create_access_token(data={"sub": user.username})

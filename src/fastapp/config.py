@@ -15,7 +15,7 @@ def get_settings():
     _load_env()
 
     class Settings(BaseSettings):
-        if not os.getenv("TESTING"):
+        if os.getenv("TESTING"):
             sqlalchemy_database_url: str = "sqlite+aiosqlite:///:memory:"
         else:
             postgres_user: str = os.getenv("POSTGRES_USER")
