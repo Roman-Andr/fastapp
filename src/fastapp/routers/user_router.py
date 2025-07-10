@@ -1,7 +1,5 @@
 from fastapi import APIRouter, status
 
-from fastapi import APIRouter, status
-
 from fastapp.core.permissions import AdminDeps
 from fastapp.schemas.role_schema import UserRole
 from fastapp.schemas.user_schema import UserCreate, UserOutput
