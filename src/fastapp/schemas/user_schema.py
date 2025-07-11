@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, field_validator
 
+from fastapp.config import settings
 from fastapp.schemas.role_schema import UserRole
 
 
@@ -11,6 +12,13 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+
+    @field_validator('username')
+    @classmethod
+    def validate_username(cls, username: str) -> str:
+        if username.lower() in settings.forbidden_usernames:
+            raise ValueError("This username is not allowed")
+        return username
 
     @field_validator('password')
     @classmethod
@@ -36,3 +44,21 @@ class UserOutput(UserBase):
 
     class Config:
         from_attributes = True
+        json_schema_extra = {
+            "examples": [
+                {
+                    "id": 1,
+                    "username": "johndoe",
+                    "email": "john@example.com",
+                    "role": "USER",
+                    "is_active": True
+                },
+                {
+                    "id": 1,
+                    "username": "admin",
+                    "email": "admin@example.com",
+                    "role": "ADMIN",
+                    "is_active": True
+                }
+            ]
+        }

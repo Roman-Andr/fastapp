@@ -1,9 +1,10 @@
 import logging
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, status
 from sqlalchemy import text
 
-from fastapp.core.database import engine, status
+from fastapp.core.database import engine
+from fastapp.schemas.healthcheck_schema import HealthCheck
 
 router = APIRouter(tags=["health"])
 logger = logging.getLogger(__name__)
@@ -14,7 +15,7 @@ async def health_check():
     try:
         async with engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
-        return {"status": "ok", "database": "connected"}
+        return HealthCheck()
     except Exception as e:
         logger.error(f"Health check failed: {e}")
         return Response(
