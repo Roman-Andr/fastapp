@@ -9,8 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapp.config import settings
 from fastapp.core.database import DBSession
-from fastapp.core.exceptions import UserNotFoundException, TokenExpiredException, InvalidTokenException, \
-    UsernameNotAllowedException, PermissionDeniedException, AlreadyExistsException
+from fastapp.core.exceptions import UserNotFoundException, TokenExpiredException, InvalidTokenException, PermissionDeniedException, AlreadyExistsException
 from fastapp.models.user import UserModel
 from fastapp.repositories.user_repository import UserRepository
 from fastapp.schemas.role_schema import UserRole
