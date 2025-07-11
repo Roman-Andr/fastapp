@@ -22,10 +22,6 @@ class UserService:
         self.repository = UserRepository(db)
 
     async def create_user(self, user_data: UserCreate) -> UserOutput:
-        forbidden_usernames = ["admin", "root", "system"]
-        if user_data.username.lower() in forbidden_usernames:
-            raise UsernameNotAllowedException()
-
         if user_data.role in [UserRole.ADMIN, UserRole.MODERATOR]:
             raise PermissionDeniedException(detail="Cannot register with this role")
 

@@ -35,6 +35,8 @@ def get_settings():
         refresh_token_expire_days: int = os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", 7)
         access_token_expire_minutes: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
 
+        forbidden_usernames: list[str] = ["admin", "root", "system", "superuser"]
+
     return Settings()
 
 

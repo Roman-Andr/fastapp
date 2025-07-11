@@ -9,7 +9,11 @@ from fastapp.services.task_service import TaskServiceDep
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
-@router.get("/")
+@router.get(
+    "/",
+    summary="Get all tasks",
+    description="Retrieve a list of tasks for the current user with pagination support"
+)
 async def read_tasks(
     service: TaskServiceDep,
     current_user: ActiveUser,
@@ -19,7 +23,11 @@ async def read_tasks(
     return await service.get_all_tasks(current_user.id, skip, limit)
 
 
-@router.get("/{task_id}")
+@router.get(
+    "/{task_id}",
+    summary="Get task by ID",
+    description="Retrieve a specific task by its ID"
+)
 async def read_task(
     task_id: int,
     service: TaskServiceDep,
@@ -28,7 +36,12 @@ async def read_task(
     return await service.get_task_by_id(current_user.id, task_id)
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    summary="Create new task",
+    description="Create a new task for the current user"
+)
 async def create_task(
     task: TaskCreate,
     service: TaskServiceDep,
@@ -37,7 +50,11 @@ async def create_task(
     return await service.create_task(current_user.id, task)
 
 
-@router.patch("/{task_id}")
+@router.patch(
+    "/{task_id}",
+    summary="Update task",
+    description="Update an existing task by its ID"
+)
 async def update_task(
     task_id: int,
     task: TaskUpdate,
@@ -47,7 +64,12 @@ async def update_task(
     return await service.update_task(current_user.id, task_id, task)
 
 
-@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{task_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete task",
+    description="Delete a task by its ID"
+)
 async def delete_task(
     task_id: int,
     service: TaskServiceDep,

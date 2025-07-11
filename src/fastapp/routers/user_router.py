@@ -8,7 +8,12 @@ from fastapp.services.user_service import UserServiceDeps
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    summary="Create new user",
+    description="Register a new user account"
+)
 async def create_user(
     user: UserCreate,
     service: UserServiceDeps
@@ -16,7 +21,12 @@ async def create_user(
     return await service.create_user(user)
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete user",
+    description="Delete a user account (admin only)"
+)
 async def delete_user(
     user_id: int,
     service: UserServiceDeps,
@@ -26,7 +36,11 @@ async def delete_user(
     return None
 
 
-@router.patch("/{user_id}/role")
+@router.patch(
+    "/{user_id}/role",
+    summary="Update user role",
+    description="Update a user's role (admin only)"
+)
 async def update_user_role(
     user_id: int,
     new_role: UserRole,

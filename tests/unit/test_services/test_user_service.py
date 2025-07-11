@@ -25,7 +25,7 @@ async def test_create_user_duplicate(user_service, user_create):
     await user_service.create_user(user_create())
     with pytest.raises(HTTPException) as exc_info:
         await user_service.create_user(user_create())
-    assert exc_info.value.status_code == status.HTTP_409_CONFLICT
+    assert exc_info.value.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.asyncio
