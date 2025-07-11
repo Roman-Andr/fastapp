@@ -1,5 +1,6 @@
 import pytest
 from fastapi import HTTPException, status
+from pydantic_core import ValidationError
 
 from tests.fixtures.users import USER_DEFAULT_USERNAME, USER_DEFAULT_EMAIL
 
@@ -15,9 +16,8 @@ async def test_create_user(user_service, user_create):
 
 @pytest.mark.asyncio
 async def test_create_user_with_forbidden_username(user_service, user_create):
-    with pytest.raises(HTTPException) as exc_info:
+    with pytest.raises(ValidationError):
         await user_service.create_user(user_create(username="admin"))
-    assert exc_info.value.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.asyncio
@@ -25,7 +25,7 @@ async def test_create_user_duplicate(user_service, user_create):
     await user_service.create_user(user_create())
     with pytest.raises(HTTPException) as exc_info:
         await user_service.create_user(user_create())
-    assert exc_info.value.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert exc_info.value.status_code == status.HTTP_409_CONFLICT
 
 
 @pytest.mark.asyncio
