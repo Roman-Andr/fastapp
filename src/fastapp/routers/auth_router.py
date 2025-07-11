@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapp.core.auth import create_access_token, get_current_active_user, create_refresh_token, \
-    authenticate_user
+    authenticate_user, ActiveUser
 from fastapp.core.limiter import limiter
 from fastapp.schemas.token_schema import Token, TokenWithRefresh
 from fastapp.schemas.user_schema import UserOutput
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/token")
-@limiter.limit("1/minute")
+# @limiter.limit("1/minute")
 async def login_for_access_token(
     request: Request,  # noqa
     service: UserServiceDeps,
@@ -31,7 +31,7 @@ async def login_for_access_token(
 
 
 @router.post("/refresh")
-@limiter.limit("1/minute")
+# @limiter.limit("1/minute")
 async def refresh_access_token(
     request: Request,  # noqa
     service: UserServiceDeps,
@@ -44,6 +44,6 @@ async def refresh_access_token(
 
 @router.get("/me")
 async def read_users_me(
-    current_user: Annotated[UserOutput, Depends(get_current_active_user)],
+    current_user: ActiveUser,
 ) -> UserOutput:
     return current_user

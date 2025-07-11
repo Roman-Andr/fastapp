@@ -1,30 +1,22 @@
 from typing import Annotated
 
-from fastapi import HTTPException, status
 from fastapi.params import Depends
 
-from fastapp.core.auth import get_current_active_user
+from fastapp.core.auth import ActiveUser
+from fastapp.core.exceptions import PermissionDeniedException
 from fastapp.schemas.role_schema import UserRole
 from fastapp.schemas.user_schema import UserOutput
 
-UserDeps = Annotated[UserOutput, Depends(get_current_active_user)]
 
-
-def get_admin(user: UserDeps):
+def get_admin(user: ActiveUser):
     if user.role != UserRole.ADMIN:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
+        raise PermissionDeniedException(detail="Admin access required")
     return user
 
 
-def get_staff(user: UserDeps):
+def get_staff(user: ActiveUser):
     if user.role not in [UserRole.ADMIN, UserRole.MODERATOR]:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Moderator or admin access required"
-        )
+        raise PermissionDeniedException(detail="Moderator or admin access required")
     return user
 
 

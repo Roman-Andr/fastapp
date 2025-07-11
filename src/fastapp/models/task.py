@@ -11,5 +11,6 @@ class TaskModel(Base):
     title = Column(String, index=True)
     description = Column(String, default="")
     is_done = Column(Boolean, default=False)
-    user_id = Column(Integer, ForeignKey("users.id"))
+
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
     user = relationship("UserModel", back_populates="tasks")

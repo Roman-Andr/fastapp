@@ -4,6 +4,7 @@ from fastapi import HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapp.core.database import DBSession
+from fastapp.core.exceptions import TaskNotFoundException
 from fastapp.repositories.task_repository import TaskRepository
 from fastapp.schemas.task_schema import TaskCreate, TaskUpdate, TaskOutput
 
@@ -18,10 +19,7 @@ class TaskService:
     async def get_task_by_id(self, user_id: int, task_id: int) -> TaskOutput:
         task = await self.repository.get(user_id, task_id)
         if not task:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Task not found"
-            )
+            raise TaskNotFoundException()
         return task
 
     async def create_task(self, user_id: int, task_data: TaskCreate) -> TaskOutput:
@@ -30,26 +28,14 @@ class TaskService:
     async def update_task(self, user_id: int, task_id: int, task_data: TaskUpdate) -> TaskOutput:
         task = await self.repository.get(user_id, task_id)
         if not task:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Task not found"
-            )
-
-        if task_data.is_done and not task_data.description:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Cannot mark task as done without description"
-            )
+            raise TaskNotFoundException()
 
         return await self.repository.update(user_id, task_id, task_data)
 
     async def delete_task(self, user_id: int, task_id: int) -> None:
         task = await self.repository.get(user_id, task_id)
         if not task:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Task not found"
-            )
+            raise TaskNotFoundException()
         await self.repository.delete(user_id, task_id)
 
 

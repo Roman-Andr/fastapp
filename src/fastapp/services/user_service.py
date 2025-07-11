@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapp.config import settings
 from fastapp.core.database import DBSession
+from fastapp.core.exceptions import UserNotFoundException, TokenExpiredException, InvalidTokenException
 from fastapp.models.user import UserModel
 from fastapp.repositories.user_repository import UserRepository
 from fastapp.schemas.role_schema import UserRole
@@ -44,19 +45,13 @@ class UserService:
     async def delete_user(self, user_id: int) -> None:
         user = await self.repository.get_user_by_id(user_id)
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
-            )
+            raise UserNotFoundException()
         await self.repository.delete_user(user_id)
 
     async def update_user_role(self, user_id: int, new_role: UserRole) -> UserOutput:
         user = await self.repository.get_user_by_id(user_id)
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
-            )
+            raise UserNotFoundException()
 
         updated_user = await self.repository.update_user_role(user_id, new_role)
         return UserOutput.model_validate(updated_user)
@@ -73,38 +68,23 @@ class UserService:
             )
 
             if payload.get("type") != "refresh":
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Invalid token type"
-                )
+                raise InvalidTokenException(detail="Invalid token type")
 
             if datetime.now(timezone.utc) > datetime.fromtimestamp(payload["exp"], tz=timezone.utc):
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Token expired"
-                )
+                raise TokenExpiredException()
 
             username = payload.get("sub")
             if not username:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Invalid token payload"
-                )
+                raise InvalidTokenException(detail="Invalid token payload")
 
             user = await self.get_user_by_username(username)
             if not user:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="User not found"
-                )
+                raise UserNotFoundException()
 
             return user
 
         except InvalidTokenError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid token"
-            )
+            raise InvalidTokenException()
 
 
 def get_user_service(db: DBSession) -> UserService:
