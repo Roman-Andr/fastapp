@@ -2,14 +2,15 @@ from datetime import timezone, datetime
 from typing import Annotated
 
 import jwt
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends
 from jwt import InvalidTokenError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapp.config import settings
 from fastapp.core.database import DBSession
-from fastapp.core.exceptions import UserNotFoundException, TokenExpiredException, InvalidTokenException
+from fastapp.core.exceptions import UserNotFoundException, TokenExpiredException, InvalidTokenException, \
+    UsernameNotAllowedException, PermissionDeniedException, AlreadyExistsException
 from fastapp.models.user import UserModel
 from fastapp.repositories.user_repository import UserRepository
 from fastapp.schemas.role_schema import UserRole
@@ -23,24 +24,15 @@ class UserService:
     async def create_user(self, user_data: UserCreate) -> UserOutput:
         forbidden_usernames = ["admin", "root", "system"]
         if user_data.username.lower() in forbidden_usernames:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="This username is not allowed"
-            )
+            raise UsernameNotAllowedException()
 
         if user_data.role in [UserRole.ADMIN, UserRole.MODERATOR]:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Cannot register with this role"
-            )
+            raise PermissionDeniedException(detail="Cannot register with this role")
 
         try:
             return await self.repository.create_user(user_data)
         except IntegrityError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Username or email already registered"
-            )
+            raise AlreadyExistsException(detail="Username or email already registered")
 
     async def delete_user(self, user_id: int) -> None:
         user = await self.repository.get_user_by_id(user_id)

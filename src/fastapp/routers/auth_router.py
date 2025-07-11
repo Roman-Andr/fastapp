@@ -3,9 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
-from fastapp.core.auth import create_access_token, get_current_active_user, create_refresh_token, \
+from fastapp.core.auth import create_access_token, create_refresh_token, \
     authenticate_user, ActiveUser
-from fastapp.core.limiter import limiter
 from fastapp.schemas.token_schema import Token, TokenWithRefresh
 from fastapp.schemas.user_schema import UserOutput
 from fastapp.services.user_service import UserServiceDeps

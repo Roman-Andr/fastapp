@@ -20,16 +20,22 @@ logger = logging.getLogger(__name__)
 )
 def create_db_engine():
     try:
+        engine_params = {
+            "echo": False,
+            "pool_pre_ping": True,
+            "connect_args": {"check_same_thread": False} if "sqlite" in settings.sqlalchemy_database_url else {}
+        }
+
+        if "postgresql" in settings.sqlalchemy_database_url:
+            engine_params.update({
+                "pool_size": 20,
+                "max_overflow": 10,
+                "pool_recycle": 3600
+            })
+
         return create_async_engine(
             settings.sqlalchemy_database_url,
-            echo=False,
-            pool_pre_ping=True,
-            pool_size=20,
-            max_overflow=10,
-            pool_recycle=3600,
-            connect_args={
-                "check_same_thread": False
-            } if "sqlite" in settings.sqlalchemy_database_url else {}
+            **engine_params
         )
     except Exception as e:
         logger.error(f"Failed to create database engine: {e}")

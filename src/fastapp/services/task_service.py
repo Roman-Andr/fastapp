@@ -1,6 +1,6 @@
 from typing import List, Annotated
 
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapp.core.database import DBSession

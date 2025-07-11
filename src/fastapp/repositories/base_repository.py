@@ -1,7 +1,6 @@
 import logging
 from typing import TypeVar, Generic
 
-from fastapi import HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError, DBAPIError
 
 from fastapp.core.exceptions import DatabaseConnectionException, DatabaseOperationException
