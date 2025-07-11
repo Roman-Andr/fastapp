@@ -42,6 +42,5 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
-          TESTING: 1
         run: |
           .venv/bin/pytest tests/ -v
