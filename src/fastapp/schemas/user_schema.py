@@ -1,11 +1,11 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, field_validator, Field
 
 from fastapp.config import settings
 from fastapp.schemas.role_schema import UserRole
 
 
 class UserBase(BaseModel):
-    username: str
+    username: str = Field(..., min_length=1)
     email: EmailStr | None = None
     role: UserRole = UserRole.USER
 

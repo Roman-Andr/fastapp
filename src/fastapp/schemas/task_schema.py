@@ -1,20 +1,20 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TaskBase(BaseModel):
-    title: str
     description: str | None = None
 
 
 class TaskCreate(TaskBase):
-    pass
+    title: str = Field(..., min_length=1)
 
 
 class TaskUpdate(TaskBase):
-    is_done: bool
+    title: str | None = Field(None, min_length=1)
+    is_done: bool | None = None
 
 
-class TaskOutput(TaskBase):
+class TaskOutput(TaskCreate):
     id: int
     is_done: bool
     user_id: int

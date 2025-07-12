@@ -1,6 +1,7 @@
 import pytest
 
 from fastapp.core.security import get_password_hash
+from fastapp.schemas.role_schema import UserRole
 from fastapp.schemas.user_schema import UserCreate
 
 USER_DEFAULT_USERNAME = "testuser"
@@ -16,6 +17,7 @@ def user_data():
         password: str = USER_DEFAULT_PASSWORD,
         hash_password: bool = False,
         is_active: bool = True,
+        role: str = "USER",
         **overrides
     ) -> dict:
         data = {
@@ -24,6 +26,7 @@ def user_data():
             "hashed_password" if hash_password else "password":
                 get_password_hash(password) if hash_password else password,
             "is_active": is_active,
+            "role": role,
             **overrides
         }
         return {k: v for k, v in data.items() if v is not None}

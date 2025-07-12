@@ -12,7 +12,7 @@ class UserModel(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
+    is_active = Column(Boolean, default=True, nullable=False)
     role = Column(
         Enum(UserRole, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False,
